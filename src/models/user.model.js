@@ -31,6 +31,10 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    otp_hash: {
+      type: String,
+      default: "",
+    },
     is_deleted: {
       type: Boolean,
       default: false,

@@ -20,4 +20,10 @@ route.post(
 
 route.post("/login", validate(userValidation.login), authController.login);
 
+route.post(
+  "/login/otp",
+  verifyTokens,
+  validate(userValidation.otp_login),
+  authController.otp_login
+);
 module.exports = route;

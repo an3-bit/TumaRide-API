@@ -1,3 +1,18 @@
+const bcrypt = require("bcrypt");
+var jwt = require("jsonwebtoken");
+const { User } = require("../models");
+const { createError } = require("../configs/errorConfig.js");
+const { ObjectId } = require("mongodb");
+
+function generateOtp() {
+  return Math.floor(1000 + Math.random() * 9000).toString();
+}
+function generateOtphash(otp) {
+  const salt = bcrypt.genSaltSync(10);
+  const hash = bcrypt.hashSync(otp, salt);
+  return hash;
+}
+
 const createUser = async (body) => {
   let password = body.password;
   const salt = bcrypt.genSaltSync(10);
@@ -6,11 +21,6 @@ const createUser = async (body) => {
 
   try {
     const user = new User(body);
-    const currentDate = new Date();
-    const expiresAt = new Date(
-      currentDate.getTime() + 30 * 24 * 60 * 60 * 1000
-    ); // 30 days in milliseconds
-
     return await user.save();
   } catch (error) {
     if (error?.errorResponse?.code === 11000) {
@@ -23,7 +33,7 @@ const createUser = async (body) => {
 };
 
 const login = async (body) => {
-  const user = await User.findOne({ email: body.email });
+  let user = await User.findOne({ email: body.email });
   if (!user) {
     throw createError(400, "Email with that account does not exist.");
   }
@@ -33,16 +43,56 @@ const login = async (body) => {
   }
   const token = jwt.sign(
     {
-      email: user.email,
       _id: user._id,
-      role: user.role,
-      subscription: { status: user.subscription },
     },
     process.env.JWT_KEY
   );
-  const { password, ...other } = user._doc;
-  other.subscription = { status: user.subscription };
-  return { status: 200, data: { token, ...other } };
+  let otp = generateOtp();
+  console.log(otp);
+  let otp_hash = generateOtphash(otp);
+  user = await User.findByIdAndUpdate(
+    new ObjectId(user._id),
+    { otp_verification: false, otp_hash },
+    { new: true }
+  );
+
+  return {
+    token,
+    _id: user._id,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    otp,
+    email: user.email,
+  };
+};
+
+const otp_login = async (body) => {
+  let user = await User.findById(new ObjectId(body.user_id));
+  if (!user) {
+    throw createError(400, "invalid user");
+  }
+  console.log(user, body.otp);
+  const isValidOtp = bcrypt.compareSync(body.otp, user.otp_hash); // true | false
+  if (!isValidOtp) {
+    throw createError(401, "Invalid otp or otp expired.");
+  }
+  const token = jwt.sign(
+    {
+      _id: user._id,
+    },
+    process.env.JWT_KEY,
+    {
+      expiresIn: "1h",
+    }
+  );
+  user = await User.findByIdAndUpdate(
+    user._id,
+    { otp_verification: true, otp_hash: "" },
+    { new: true }
+  );
+  const { password, otp_hash, ...other } = user._doc;
+
+  return { token, ...other };
 };
 
 const resetPassword = async (id, body) => {
@@ -63,4 +113,5 @@ module.exports = {
   createUser,
   login,
   resetPassword,
+  otp_login,
 };

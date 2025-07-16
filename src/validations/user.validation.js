@@ -82,6 +82,15 @@ const login = {
   }),
 };
 
+const otp_login = {
+  body: Joi.object().keys({
+    otp: Joi.string()
+      .pattern(/^[0-9]{4}$/) // Only allows exactly 4 digits
+      .required(),
+    user_id: Joi.string().custom(objectId).required(),
+  }),
+};
+
 const resetPassword = {
   body: Joi.object().keys({
     password: Joi.string()
@@ -137,4 +146,5 @@ module.exports = {
   resetPassword,
   createStaff,
   findandfilter,
+  otp_login,
 };

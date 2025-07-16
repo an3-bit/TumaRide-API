@@ -1,7 +1,6 @@
 const { createError } = require("../configs/errorConfig.js");
 const { User } = require("../models/index.js");
-const bcrypt = require("bcrypt");
-var jwt = require("jsonwebtoken");
+
 const { ObjectId } = require("mongodb");
 
 const updateUser = async (id, body) => {

@@ -5,85 +5,7 @@ const HERO_IMG = 'https://images.pexels.com/photos/4391470/pexels-photo-4391470.
 
 const statStyle = { textAlign: 'center', flex: 1 };
 
-const features = [
-  {
-    icon: <span style={{ fontSize: 32, color: '#1db954' }}>⏱️</span>,
-    title: 'Fast Delivery',
-    desc: 'Same-day and on-demand delivery options available. Track your parcel in real-time.',
-  },
-  {
-    icon: <span style={{ fontSize: 32, color: '#1db954' }}>💵</span>,
-    title: 'Affordable Rates',
-    desc: 'Transparent pricing with no hidden fees. Pay via M-Pesa, cash, or card.',
-  },
-  {
-    icon: <span style={{ fontSize: 32, color: '#FFD600' }}>🛡️</span>,
-    title: 'Secure & Trusted',
-    desc: 'All riders are verified and insured. Your packages are safe with us.',
-  },
-  {
-    icon: <span style={{ fontSize: 32, color: '#1db954' }}>📍</span>,
-    title: 'Wide Coverage',
-    desc: 'Serving Nairobi, Mombasa, and expanding to more cities across Kenya.',
-  },
-  {
-    icon: <span style={{ fontSize: 32, color: '#1db954' }}>📱</span>,
-    title: 'Easy Booking',
-    desc: 'Book online, track progress, and get notifications – all from your phone.',
-  },
-  {
-    icon: <span style={{ fontSize: 32, color: '#1db954' }}>🚚</span>,
-    title: 'Multiple Vehicles',
-    desc: 'Bikes, TukTuks, and vans available. Choose based on your package size.',
-  },
-];
-
-const stats = [
-  { value: '10,000+', label: 'Successful Deliveries' },
-  { value: '500+', label: 'Verified Riders' },
-  { value: '4.9/5', label: 'Customer Rating' },
-  { value: '24/7', label: 'Customer Support' },
-];
-
-const featureCardStyle = {
-  background: '#fff',
-  borderRadius: 16,
-  boxShadow: '0 2px 12px #f2f2f2',
-  padding: '32px 28px',
-  minWidth: 260,
-  maxWidth: 340,
-  flex: 1,
-  margin: 12,
-  textAlign: 'left',
-  transition: 'box-shadow 0.2s, transform 0.2s',
-  cursor: 'pointer',
-  border: '1px solid #f2f2f2',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 16,
-};
-
-const featureCardHover = {
-  boxShadow: '0 8px 32px #e8f5e9',
-  transform: 'translateY(-6px) scale(1.03)',
-  border: '1.5px solid #b2f2d7',
-};
-
-function FeatureCard({ icon, title, desc }) {
-  const [hover, setHover] = React.useState(false);
-  return (
-    <div
-      style={{ ...featureCardStyle, ...(hover ? featureCardHover : {}) }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
-      <div>{icon}</div>
-      <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 4 }}>{title}</div>
-      <div style={{ color: '#666', fontSize: 16 }}>{desc}</div>
-    </div>
-  );
-}
-
+// Vehicle cards and component (moved to top)
 const vehicleCards = [
   {
     icon: '🏍️',
@@ -158,6 +80,130 @@ function VehicleCard({ icon, title, desc, price, btn, active }) {
   );
 }
 
+const features = [
+  {
+    icon: <span style={{ fontSize: 32, color: '#1db954' }}>💸</span>,
+    title: 'Earn on the Move',
+    desc: 'Travelers get paid to deliver packages along their route. Sign up, get verified, and start earning instantly.',
+  },
+  {
+    icon: <span style={{ fontSize: 32, color: '#1db954' }}>🤝</span>,
+    title: 'Smart Matching',
+    desc: 'We match travelers and businesses based on destination and timing for seamless, efficient delivery.',
+  },
+  {
+    icon: <span style={{ fontSize: 32, color: '#FFD600' }}>🔒</span>,
+    title: 'Verified & Secure',
+    desc: 'All travelers are verified for safety. Businesses can trust their packages are in good hands.',
+  },
+  {
+    icon: <span style={{ fontSize: 32, color: '#1db954' }}>💰</span>,
+    title: 'Lower Delivery Costs',
+    desc: 'Businesses save money by leveraging travelers already headed to their destination—no need for expensive couriers.',
+  },
+  {
+    icon: <span style={{ fontSize: 32, color: '#1db954' }}>📦</span>,
+    title: 'Flexible for All',
+    desc: 'Whether you’re a business or an individual, send and receive packages with ease and flexibility.',
+  },
+  {
+    icon: <span style={{ fontSize: 32, color: '#1db954' }}>📱</span>,
+    title: 'Easy Booking & Tracking',
+    desc: 'Book, match, and track your delivery—all from your phone. Real-time updates for peace of mind.',
+  },
+];
+
+const stats = [
+  { value: '10,000+', label: 'Deliveries Completed' },
+  { value: '500+', label: 'Verified Travelers' },
+  { value: '4.9/5', label: 'Customer Rating' },
+  { value: '24/7', label: 'Support' },
+];
+
+const featureCardStyle = {
+  background: '#fff',
+  borderRadius: 16,
+  boxShadow: '0 2px 12px #f2f2f2',
+  padding: '32px 28px',
+  minWidth: 260,
+  maxWidth: 340,
+  flex: 1,
+  margin: 12,
+  textAlign: 'left',
+  transition: 'box-shadow 0.2s, transform 0.2s',
+  cursor: 'pointer',
+  border: '1px solid #f2f2f2',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 16,
+};
+
+const featureCardHover = {
+  boxShadow: '0 8px 32px #e8f5e9',
+  transform: 'translateY(-6px) scale(1.03)',
+  border: '1.5px solid #b2f2d7',
+};
+
+function FeatureCard({ icon, title, desc }) {
+  const [hover, setHover] = React.useState(false);
+  return (
+    <div
+      style={{ ...featureCardStyle, ...(hover ? featureCardHover : {}) }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      <div>{icon}</div>
+      <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 4 }}>{title}</div>
+      <div style={{ color: '#666', fontSize: 16 }}>{desc}</div>
+    </div>
+  );
+}
+
+const howItWorksSteps = [
+  {
+    icon: '🧑‍💼',
+    title: 'For Businesses',
+    steps: [
+      'Book a delivery and specify your package destination.',
+      'Get matched with a verified traveler going your way.',
+      'Hand over your package and track it in real time.',
+      'Save on delivery costs and get peace of mind.',
+    ],
+  },
+  {
+    icon: '🧑‍🦰',
+    title: 'For Travelers',
+    steps: [
+      'Sign up and get verified as a mover.',
+      'Input your travel destination and schedule.',
+      'Get matched with packages along your route.',
+      'Pick up, deliver, and earn on the move!', 
+    ],
+  },
+];
+
+function HowItWorks() {
+  return (
+    <section style={{ maxWidth: 1100, margin: '4rem auto 0 auto', textAlign: 'center' }}>
+      <h2 style={{ fontWeight: 800, fontSize: 32, marginBottom: 10 }}>How It Works</h2>
+      <p style={{ color: '#7a8593', fontSize: 20, marginBottom: 36 }}>
+        TumaRide connects businesses and travelers for smarter, cheaper, and more flexible delivery.
+      </p>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 32 }}>
+        {howItWorksSteps.map((role, idx) => (
+          <div key={role.title} style={{ background: '#fff', borderRadius: 16, boxShadow: '0 2px 12px #e8f5e9', padding: 32, minWidth: 320, maxWidth: 400, margin: 12, textAlign: 'left' }}>
+            <div style={{ fontSize: 36, marginBottom: 8 }}>{role.icon}</div>
+            <div style={{ fontWeight: 700, fontSize: 22, marginBottom: 12 }}>{role.title}</div>
+            <ol style={{ color: '#444', fontSize: 17, paddingLeft: 20 }}>
+              {role.steps.map((s, i) => <li key={i} style={{ marginBottom: 10 }}>{s}</li>)}
+            </ol>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 const LandingPage = () => (
   <div style={{ fontFamily: 'Inter, sans-serif', background: '#f8fdf9', color: '#222' }}>
     {/* Header */}
@@ -169,7 +215,7 @@ const LandingPage = () => (
         <a href="#pricing" style={{ color: '#222', textDecoration: 'none', fontWeight: 500 }}>Pricing</a>
         <a href="#contact" style={{ color: '#222', textDecoration: 'none', fontWeight: 500 }}>Contact</a>
         <Link to="/auth/login" style={{ color: '#1db954', textDecoration: 'none', fontWeight: 500, marginLeft: 16 }}>Sign In</Link>
-        <Link to="/auth/signup" style={{ background: '#1db954', color: '#fff', padding: '0.5rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 500, marginLeft: 8 }}>Book Delivery</Link>
+        <Link to="/sender/request-delivery" style={{ background: '#1db954', color: '#fff', padding: '0.5rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 500, marginLeft: 8 }}>Book Delivery</Link>
       </div>
     </nav>
 
@@ -180,24 +226,24 @@ const LandingPage = () => (
           ● Now serving Nairobi & Mombasa
         </div>
         <h1 style={{ fontSize: 54, fontWeight: 800, margin: '0 0 12px 0', lineHeight: 1.1 }}>
-          Send Parcels<br />
-          <span style={{ color: '#1db954' }}>Smarter</span><br />
-          Value at Every Stop
+          Earn on the Move<br />
+          <span style={{ color: '#1db954' }}>Deliver Smarter</span><br />
+          For Travelers & Businesses
         </h1>
         <p style={{ fontSize: 20, color: '#555', marginBottom: 36, marginTop: 8, maxWidth: 500 }}>
-          Kenya's most reliable on-demand delivery service. From documents to packages, we connect you with trusted riders for fast, affordable deliveries across the city.
+          Travelers earn by carrying packages along their route. Businesses save on delivery by matching with verified travelers going to their destination. Everyone wins with TumaRide.
         </p>
         <div style={{ display: 'flex', gap: 18, marginBottom: 40 }}>
           <Link to="/sender/request-delivery" style={{ background: '#1db954', color: '#fff', padding: '1.1rem 2.2rem', borderRadius: 12, textDecoration: 'none', fontWeight: 700, fontSize: 18, boxShadow: '0 2px 8px #e8f5e9', display: 'flex', alignItems: 'center', gap: 8 }}>
             Book a Delivery <span style={{ fontSize: 22, marginLeft: 4 }}>→</span>
           </Link>
-          <button style={{ background: '#fff', color: '#222', border: '1.5px solid #d1f5e0', padding: '1.1rem 2.2rem', borderRadius: 12, fontWeight: 700, fontSize: 18, display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
-            <span style={{ fontSize: 22 }}>▶</span> Watch Demo
-          </button>
+          <Link to="/auth/signup" style={{ background: '#fff', color: '#1db954', border: '1.5px solid #d1f5e0', padding: '1.1rem 2.2rem', borderRadius: 12, fontWeight: 700, fontSize: 18, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+            Become a Mover
+          </Link>
         </div>
         <div style={{ display: 'flex', gap: 48, marginTop: 24, maxWidth: 420 }}>
           <div style={statStyle}><div style={{ fontWeight: 700, fontSize: 26, color: '#1db954' }}>10K+</div><div style={{ color: '#888', fontSize: 16 }}>Deliveries</div></div>
-          <div style={statStyle}><div style={{ fontWeight: 700, fontSize: 26, color: '#1db954' }}>500+</div><div style={{ color: '#888', fontSize: 16 }}>Riders</div></div>
+          <div style={statStyle}><div style={{ fontWeight: 700, fontSize: 26, color: '#1db954' }}>500+</div><div style={{ color: '#888', fontSize: 16 }}>Travelers</div></div>
           <div style={statStyle}><div style={{ fontWeight: 700, fontSize: 26, color: '#1db954' }}>4.9</div><div style={{ color: '#888', fontSize: 16 }}>Rating</div></div>
         </div>
       </div>
@@ -269,9 +315,12 @@ const LandingPage = () => (
       </div>
     </section>
 
+    {/* How It Works Section */}
+    <HowItWorks />
+
     {/* Simple Pricing Section - Choose Your Vehicle Style */}
     <section id="pricing" style={{ maxWidth: 1100, margin: '3rem auto', textAlign: 'center' }}>
-      <h2 style={{ fontWeight: 700, fontSize: 28, marginBottom: 32 }}>Choose Your Vehicle</h2>
+      <h2 style={{ fontWeight: 700, fontSize: 28, marginBottom: 32 }}>Choose Your Vehicle Based on your Package Needs</h2>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, justifyContent: 'center' }}>
         {vehicleCards.map((v, i) => <VehicleCard key={i} {...v} />)}
       </div>
@@ -281,7 +330,7 @@ const LandingPage = () => (
     <section style={{ maxWidth: 1200, margin: '4rem auto 0 auto', textAlign: 'center' }}>
       <h2 style={{ fontWeight: 800, fontSize: 32, marginBottom: 10 }}>Why Choose TumaRide?</h2>
       <p style={{ color: '#7a8593', fontSize: 20, marginBottom: 36 }}>
-        Experience the best in parcel delivery with our comprehensive service designed for modern Kenya.
+        Travelers earn, businesses save. TumaRide is the smart way to move parcels across Kenya.
       </p>
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 0 }}>
         {features.map((f, i) => <FeatureCard key={i} {...f} />)}
@@ -299,7 +348,7 @@ const LandingPage = () => (
 
     {/* Minimal Footer */}
     <footer style={{ background: '#fff', borderTop: '1px solid #e8f5e9', padding: '2rem 1rem', color: '#888', fontSize: 14, textAlign: 'center' }}>
-      © 2024 TumaRide. All rights reserved.
+      © 2025 TumaRide. All rights reserved.
     </footer>
   </div>
 );

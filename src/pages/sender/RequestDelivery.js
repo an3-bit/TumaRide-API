@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const stepIcons = [
-  <span style={{ fontSize: 22, color: '#1db954', marginRight: 8 }}>📍</span>,
-  <span style={{ fontSize: 22, color: '#1db954', marginRight: 8 }}>📦</span>,
-  <span style={{ fontSize: 22, color: '#1db954', marginRight: 8 }}>💳</span>,
-];
-
 const Stepper = ({ step }) => (
   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '2rem 0 2.5rem 0', gap: 32 }}>
     {[1, 2, 3].map((n, i) => (

@@ -1,11 +1,21 @@
 const { createError } = require("../configs/errorConfig");
 const { pick } = require("../middlewares/validation");
-const { authService, notificationService } = require("../services");
+const {
+  authService,
+  notificationService,
+  KYC_VerificationService,
+} = require("../services");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const createUser = async (req, resp, next) => {
   try {
     const user = await authService.createUser(req.body);
+    if (user && user.type.length && user.type.includes("rider")) {
+      KYC_VerificationService.createKYC_verification({
+        rider_id: user._id,
+        status: "pending",
+      });
+    }
     resp
       .status(200)
       .json({ status: 200, data: { message: "New account created" } });

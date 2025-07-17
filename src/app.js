@@ -9,7 +9,10 @@ const appRoute = require("./routes");
 dotenv.config();
 app.use(express.json());
 
-const allowedOrigins = [process.env.CLIENT_URL];
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  "https://tumarideapp.netlify.app/",
+];
 
 app.use(
   cors({

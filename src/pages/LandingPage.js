@@ -1,5 +1,69 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+// Responsive Navbar with Hamburger
+function ResponsiveNavbar() {
+  const [open, setOpen] = React.useState(false);
+  // Close menu on navigation
+  const handleNav = () => setOpen(false);
+  return (
+    <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 2rem', background: '#fff', borderBottom: '1px solid #e8f5e9', position: 'relative' }}>
+      <div style={{ fontWeight: 700, fontSize: 24, color: '#1db954' }}>TumaRide</div>
+      {/* Hamburger Icon */}
+      <div style={{ display: 'none', cursor: 'pointer', zIndex: 20 }} className="navbar-hamburger" onClick={() => setOpen(o => !o)}>
+        <div style={{ width: 28, height: 4, background: '#1db954', margin: '5px 0', borderRadius: 2 }} />
+        <div style={{ width: 28, height: 4, background: '#1db954', margin: '5px 0', borderRadius: 2 }} />
+        <div style={{ width: 28, height: 4, background: '#1db954', margin: '5px 0', borderRadius: 2 }} />
+      </div>
+      {/* Links */}
+      <div
+        style={{
+          display: 'flex',
+          gap: 32,
+          alignItems: 'center',
+          position: 'static',
+        }}
+        className={`navbar-links${open ? ' open' : ''}`}
+      >
+        <Link to="/" style={{ color: '#222', textDecoration: 'none', fontWeight: 500 }} onClick={handleNav}>Home</Link>
+        <a href="#services" style={{ color: '#222', textDecoration: 'none', fontWeight: 500 }} onClick={handleNav}>Services</a>
+        <a href="#pricing" style={{ color: '#222', textDecoration: 'none', fontWeight: 500 }} onClick={handleNav}>Pricing</a>
+        <a href="#contact" style={{ color: '#222', textDecoration: 'none', fontWeight: 500 }} onClick={handleNav}>Contact</a>
+        <Link to="/auth/login" style={{ color: '#1db954', textDecoration: 'none', fontWeight: 500, marginLeft: 16 }} onClick={handleNav}>Sign In</Link>
+        <Link to="/sender/request-delivery" style={{ background: '#1db954', color: '#fff', padding: '0.5rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 500, marginLeft: 8 }} onClick={handleNav}>Book Delivery</Link>
+      </div>
+      {/* Responsive Styles */}
+      <style>{`
+        @media (max-width: 900px) {
+          .navbar-links {
+            display: none !important;
+          }
+          .navbar-hamburger {
+            display: block !important;
+          }
+          .navbar-links.open {
+            display: flex !important;
+            flex-direction: column;
+            gap: 0;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #fff;
+            width: 100vw;
+            left: 0;
+            box-shadow: 0 8px 32px #e8f5e9;
+            z-index: 10;
+            padding: 2rem 0 1rem 0;
+          }
+          .navbar-links.open a, .navbar-links.open .router-link {
+            margin: 0.7rem 0;
+            font-size: 20px;
+            text-align: center;
+          }
+        }
+      `}</style>
+    </nav>
+  );
+}
 
 const HERO_IMG = 'https://images.pexels.com/photos/4391470/pexels-photo-4391470.jpeg?auto=compress&w=800';
 
@@ -207,17 +271,7 @@ function HowItWorks() {
 const LandingPage = () => (
   <div style={{ fontFamily: 'Inter, sans-serif', background: '#f8fdf9', color: '#222' }}>
     {/* Header */}
-    <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 2rem', background: '#fff', borderBottom: '1px solid #e8f5e9' }}>
-      <div style={{ fontWeight: 700, fontSize: 24, color: '#1db954' }}>TumaRide</div>
-      <div style={{ display: 'flex', gap: 32, alignItems: 'center' }}>
-        <Link to="/" style={{ color: '#222', textDecoration: 'none', fontWeight: 500 }}>Home</Link>
-        <a href="#services" style={{ color: '#222', textDecoration: 'none', fontWeight: 500 }}>Services</a>
-        <a href="#pricing" style={{ color: '#222', textDecoration: 'none', fontWeight: 500 }}>Pricing</a>
-        <a href="#contact" style={{ color: '#222', textDecoration: 'none', fontWeight: 500 }}>Contact</a>
-        <Link to="/auth/login" style={{ color: '#1db954', textDecoration: 'none', fontWeight: 500, marginLeft: 16 }}>Sign In</Link>
-        <Link to="/sender/request-delivery" style={{ background: '#1db954', color: '#fff', padding: '0.5rem 1.5rem', borderRadius: 6, textDecoration: 'none', fontWeight: 500, marginLeft: 8 }}>Book Delivery</Link>
-      </div>
-    </nav>
+    <ResponsiveNavbar />
 
     {/* Hero Section */}
     <section style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', padding: '3rem 1rem 2rem 1rem', background: '#f8fdf9', minHeight: 420 }}>
@@ -237,7 +291,7 @@ const LandingPage = () => (
           <Link to="/sender/request-delivery" style={{ background: '#1db954', color: '#fff', padding: '1.1rem 2.2rem', borderRadius: 12, textDecoration: 'none', fontWeight: 700, fontSize: 18, boxShadow: '0 2px 8px #e8f5e9', display: 'flex', alignItems: 'center', gap: 8 }}>
             Book a Delivery <span style={{ fontSize: 22, marginLeft: 4 }}>→</span>
           </Link>
-          <Link to="/auth/signup" style={{ background: '#fff', color: '#1db954', border: '1.5px solid #d1f5e0', padding: '1.1rem 2.2rem', borderRadius: 12, fontWeight: 700, fontSize: 18, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+          <Link to="/auth/become-mover" style={{ background: '#fff', color: '#1db954', border: '1.5px solid #d1f5e0', padding: '1.1rem 2.2rem', borderRadius: 12, fontWeight: 700, fontSize: 18, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
             Become a Mover
           </Link>
         </div>

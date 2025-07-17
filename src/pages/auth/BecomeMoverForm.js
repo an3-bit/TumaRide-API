@@ -71,7 +71,7 @@ export default function BecomeMoverForm() {
         {idPreview && <img src={idPreview} alt="ID Preview" style={{ width: 120, marginBottom: 12, borderRadius: 8, border: '1px solid #e8f5e9' }} />}
         <label style={{ fontWeight: 600, marginBottom: 6 }}>Upload or Take a Photo</label>
         <input name="photoFile" type="file" accept="image/*" capture="user" onChange={handlePhotoCapture} ref={photoInputRef} required style={{ display: 'block', margin: '0.5rem 0 1rem 0' }} />
-        {photoPreview && <img src={photoPreview} alt="Photo Preview" style={{ width: 120, marginBottom: 12, borderRadius: '50%', border: '1px solid #e8f5e9' }} />}
+        {photoPreview && <img src={photoPreview} alt="" style={{ width: 120, marginBottom: 12, borderRadius: '50%', border: '1px solid #e8f5e9' }} />}
         <button type="submit" style={{ background: '#1db954', color: '#fff', border: 'none', padding: '0.9rem 0', borderRadius: 8, width: '100%', fontWeight: 700, fontSize: 18, marginTop: 8 }}>Submit Application</button>
       </form>
     </div>

@@ -1,42 +1,49 @@
 const { createError } = require("../configs/errorConfig");
 const { pick } = require("../middlewares/validation");
-const { userService } = require("../services");
+const { feedbackService, logsService } = require("../services");
 const ObjectId = require("mongoose").Types.ObjectId;
 
-const updateUser = async (req, resp, next) => {
+const createFeedback = async (req, resp, next) => {
   try {
-    const user = await userService.updateUser(req.params.id, req.body);
+    await feedbackService.createFeedback(req.body);
+    resp.status(200).json({ status: 200, data: { message: "Feedback added" } });
+  } catch (error) {
+    return next(createError(error.status || 500, error.message));
+  }
+};
+
+const updateFeedback = async (req, resp, next) => {
+  try {
+    const feedbackDoc = await feedbackService.updateFeedback(
+      req.params.id,
+      req.body
+    );
     logsService.createLog({
       user_id: req.user._id,
       type: "audit",
-      module: "user",
-      title: "account update",
-      description: "user updated a account",
+      module: "feedback",
+      title: "feedback updated ",
+      description: "user  edited there feedback",
       data: {
         _id: req.params.id,
       },
     });
-    resp.status(200).json({ status: 200, data: user });
+    resp.status(200).json({ status: 200, data: feedbackDoc });
   } catch (error) {
     return next(createError(error.status || 500, error.message));
   }
 };
 
-const getauthUser = async (req, resp, next) => {
+const getFeedbackById = async (req, resp, next) => {
   try {
-    const user = await userService.getauthUser(req.user._id);
-    console.log(user);
-
-    resp
-      .set("Cache-Control", "no-store")
-      .status(200)
-      .json({ status: 200, data: user });
+    const feedbackDoc = await feedbackService.getFeedbackById(req.params.id);
+    resp.status(200).json({ status: 200, data: feedbackDoc });
   } catch (error) {
     return next(createError(error.status || 500, error.message));
   }
 };
 
-const findandfilter = async (req, resp, next) => {
+const findAndFilterFeedbacks = async (req, resp, next) => {
   try {
     let filter = { is_deleted: false };
 
@@ -49,7 +56,9 @@ const findandfilter = async (req, resp, next) => {
       else if (Array.isArray(req.body.match_values[key]))
         filter[key] = { $in: req.body.match_values[key] };
     }
+
     const options = pick(req.body, ["sortBy", "limit", "page"]);
+
     if (req.body?.search) {
       filter["$or"] = [
         {
@@ -61,37 +70,41 @@ const findandfilter = async (req, resp, next) => {
       ];
     }
 
-    const user = await userService.findandfilter(filter, options);
-
-    resp.status(200).json({ status: 200, data: user });
+    const result = await feedbackService.findAndFilterFeedbacks(
+      filter,
+      options
+    );
+    resp.status(200).json({ status: 200, data: result });
   } catch (error) {
     return next(createError(error.status || 500, error.message));
   }
 };
 
-const deleteUser = async (req, resp, next) => {
+const deleteFeedback = async (req, resp, next) => {
   try {
-    await userService.deleteUser(req.params.id);
+    await feedbackService.deleteFeedback(req.params.id);
     logsService.createLog({
       user_id: req.user._id,
       type: "audit",
-      module: "user",
-      title: "user deleted ",
-      description: "user deleted a account",
+      module: "feedback",
+      title: " feedback deleted",
+      description: "user deleted  a feedback",
       data: {
         _id: req.params.id,
       },
     });
     resp
       .status(200)
-      .json({ status: 200, data: { message: "User has been deleted" } });
+      .json({ status: 200, data: { message: "Feedback has been deleted" } });
   } catch (error) {
     return next(createError(error.status || 500, error.message));
   }
 };
+
 module.exports = {
-  updateUser,
-  getauthUser,
-  findandfilter,
-  deleteUser,
+  updateFeedback,
+  getFeedbackById,
+  findAndFilterFeedbacks,
+  deleteFeedback,
+  createFeedback,
 };

@@ -3,3 +3,7 @@ module.exports.authService = require("./auth.service");
 module.exports.notificationService = require("./notification.service");
 module.exports.packageService = require("./package.service");
 module.exports.KYC_VerificationService = require("./kyc_verification.service");
+module.exports.feedbackService = require("./feedback.service");
+module.exports.paymentService = require("./payment.service");
+module.exports.logsService = require("./logs.service");
+module.exports.documentService = require("./documents.service");

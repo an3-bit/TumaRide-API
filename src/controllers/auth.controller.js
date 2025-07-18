@@ -4,6 +4,7 @@ const {
   authService,
   notificationService,
   KYC_VerificationService,
+  logsService,
 } = require("../services");
 const ObjectId = require("mongoose").Types.ObjectId;
 
@@ -16,6 +17,14 @@ const createUser = async (req, resp, next) => {
         status: "pending",
       });
     }
+
+    logsService.createLog({
+      user_id: user._id,
+      type: "audit",
+      module: "auth",
+      title: "Account created",
+      description: "new account created",
+    });
     resp
       .status(200)
       .json({ status: 200, data: { message: "New account created" } });
@@ -57,6 +66,14 @@ const otp_login = async (req, resp, next) => {
 const resetPassword = async (req, resp, next) => {
   try {
     const user = await authService.resetPassword(req.user._id, req.body);
+
+    logsService.createLog({
+      user_id: user._id,
+      type: "audit",
+      module: "auth",
+      title: "password reset",
+      description: "user password has been reset",
+    });
 
     resp.status(200).json({
       status: 200,

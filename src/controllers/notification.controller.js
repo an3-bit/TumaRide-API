@@ -1,7 +1,7 @@
 const { createError } = require("../configs/errorConfig");
 const { pick } = require("../middlewares/validation");
 const { User } = require("../models");
-const { notificationService } = require("../services");
+const { notificationService, logsService } = require("../services");
 const ObjectId = require("mongoose").Types.ObjectId;
 const jwt = require("jsonwebtoken");
 
@@ -30,6 +30,14 @@ const resetPasswordlink = async (req, resp, next) => {
       user_name: `${user.first_name} ${user.last_name}`,
       reset_link,
       user_id: user._id,
+    });
+
+    logsService.createLog({
+      user_id: req.user._id,
+      type: "audit",
+      module: "notification",
+      title: "email notification",
+      description: "Reset password notification triggered",
     });
 
     resp.status(200).json({ status: 200, data: { success: true } });

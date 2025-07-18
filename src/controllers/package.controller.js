@@ -1,6 +1,6 @@
 const { createError } = require("../configs/errorConfig");
 const { pick } = require("../middlewares/validation");
-const { packageService } = require("../services");
+const { packageService, logsService } = require("../services");
 const ObjectId = require("mongoose").Types.ObjectId;
 
 const createPackage = async (req, resp, next) => {
@@ -18,6 +18,16 @@ const updatePackage = async (req, resp, next) => {
       req.params.id,
       req.body
     );
+    logsService.createLog({
+      user_id: req.user._id,
+      type: "audit",
+      module: "package",
+      title: "package updated ",
+      description: "user updated package",
+      data: {
+        _id: req.params.id,
+      },
+    });
     resp.status(200).json({ status: 200, data: packageDoc });
   } catch (error) {
     return next(createError(error.status || 500, error.message));
@@ -75,6 +85,16 @@ const findandfilter = async (req, resp, next) => {
 const deletePackage = async (req, resp, next) => {
   try {
     await packageService.deletePackage(req.params.id);
+    logsService.createLog({
+      user_id: req.user._id,
+      type: "audit",
+      module: "package",
+      title: "package deleted ",
+      description: "user deleted a package",
+      data: {
+        _id: req.params.id,
+      },
+    });
     resp
       .status(200)
       .json({ status: 200, data: { message: "Package has been deleted" } });

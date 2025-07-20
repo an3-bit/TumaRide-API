@@ -8,9 +8,23 @@ import Login from './pages/auth/Login';
 import SignUp from './pages/auth/SignUp';
 import RequestDelivery from './pages/sender/RequestDelivery';
 import BecomeMoverForm from './pages/auth/BecomeMoverForm';
+import OnboardingFlow from './pages/auth/OnboardingFlow';
 import './App.css';
 
 function App() {
+  React.useEffect(() => {
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      window.addEventListener('appinstalled', () => {
+        window.location.href = '/auth/onboarding';
+      }, { once: true });
+    };
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
   return (
     <Router>
       <Routes>
@@ -22,6 +36,7 @@ function App() {
         <Route path="/auth/signup" element={<SignUp />} />
         <Route path="/sender/request-delivery" element={<RequestDelivery />} />
         <Route path="/auth/become-mover" element={<BecomeMoverForm />} />
+        <Route path="/auth/onboarding" element={<OnboardingFlow />} />
         {/* Other routes handled elsewhere */}
       </Routes>
     </Router>

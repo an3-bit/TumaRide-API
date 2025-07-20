@@ -274,8 +274,8 @@ const LandingPage = () => (
     <ResponsiveNavbar />
 
     {/* Hero Section */}
-    <section style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', padding: '3rem 1rem 2rem 1rem', background: '#f8fdf9', minHeight: 420 }}>
-      <div style={{ flex: 1, minWidth: 340, maxWidth: 540, marginRight: 32 }}>
+    <section className="hero-section" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', padding: '3rem 1rem 2rem 1rem', background: '#f8fdf9', minHeight: 420 }}>
+      <div style={{ flex: 1, minWidth: 340, maxWidth: 540, marginRight: 32 }} className="hero-section">
         <div style={{ background: '#e8f5e9', color: '#1db954', display: 'inline-block', padding: '6px 20px', borderRadius: 20, fontWeight: 600, fontSize: 15, marginBottom: 24 }}>
           ● Now serving Nairobi & Mombasa
         </div>
@@ -316,6 +316,24 @@ const LandingPage = () => (
           </div>
         </div>
       </div>
+      {/* Responsive hero text styles */}
+      <style>{`
+        @media (max-width: 600px) {
+          .hero-section h1 {
+            font-size: 2.1rem !important;
+            text-align: center !important;
+          }
+          .hero-section p {
+            font-size: 1.05rem !important;
+            text-align: center !important;
+            max-width: 100vw !important;
+          }
+          .hero-section {
+            text-align: center !important;
+            margin-right: 0 !important;
+          }
+        }
+      `}</style>
     </section>
 
     {/* Get an Instant Quote Section */}

@@ -1,5 +1,47 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+// Install App Button logic
+function InstallAppButton() {
+  const [deferredPrompt, setDeferredPrompt] = React.useState(null);
+  const [show, setShow] = React.useState(false);
+  React.useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShow(true);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+  if (!show) return null;
+  return (
+    <button
+      onClick={() => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          setShow(false);
+        }
+      }}
+      style={{
+        display: 'block',
+        background: '#1db954',
+        color: '#fff',
+        border: 'none',
+        borderRadius: 8,
+        padding: '1rem 2rem',
+        fontWeight: 700,
+        fontSize: 18,
+        margin: '1.5rem auto 0 auto',
+        width: '90%',
+        maxWidth: 340,
+        boxShadow: '0 2px 8px #e8f5e9',
+      }}
+      className="install-app-btn"
+    >
+      Install App
+    </button>
+  );
+}
 // Responsive Navbar with Hamburger
 function ResponsiveNavbar() {
   const [open, setOpen] = React.useState(false);
@@ -272,7 +314,8 @@ const LandingPage = () => (
   <div style={{ fontFamily: 'Inter, sans-serif', background: '#f8fdf9', color: '#222' }}>
     {/* Header */}
     <ResponsiveNavbar />
-
+    {/* Install App button for small screens */}
+    <InstallAppButton />
     {/* Hero Section */}
     <section className="hero-section" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', padding: '3rem 1rem 2rem 1rem', background: '#f8fdf9', minHeight: 420 }}>
       <div style={{ flex: 1, minWidth: 340, maxWidth: 540, marginRight: 32 }} className="hero-section">

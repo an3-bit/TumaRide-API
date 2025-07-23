@@ -9,6 +9,8 @@ import SignUp from './pages/auth/SignUp';
 import RequestDelivery from './pages/sender/RequestDelivery';
 import BecomeMoverForm from './pages/auth/BecomeMoverForm';
 import OnboardingFlow from './pages/auth/OnboardingFlow';
+import ResetPassword from './pages/auth/ResetPassword';
+import RequestReset from './pages/auth/RequestReset';
 import './App.css';
 
 function App() {
@@ -37,6 +39,8 @@ function App() {
         <Route path="/sender/request-delivery" element={<RequestDelivery />} />
         <Route path="/auth/become-mover" element={<BecomeMoverForm />} />
         <Route path="/auth/onboarding" element={<OnboardingFlow />} />
+        <Route path="/auth/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/auth/request-reset" element={<RequestReset />} />
         {/* Other routes handled elsewhere */}
       </Routes>
     </Router>

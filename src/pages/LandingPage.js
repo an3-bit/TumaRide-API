@@ -468,4 +468,132 @@ const LandingPage = () => (
   </div>
 );
 
-export default LandingPage; 
+export default LandingPage;
+
+// Responsive global styles for landing page
+const landingResponsiveStyle = document.createElement('style');
+landingResponsiveStyle.innerHTML = `
+  @media (max-width: 900px) {
+    .hero-section {
+      flex-direction: column !important;
+      padding: 2rem 0.5rem 1.5rem 0.5rem !important;
+    }
+    .hero-section > div {
+      margin-right: 0 !important;
+      max-width: 100vw !important;
+    }
+    .hero-section h1 {
+      font-size: 2.1rem !important;
+      text-align: center !important;
+    }
+    .hero-section p {
+      font-size: 1.05rem !important;
+      text-align: center !important;
+      max-width: 100vw !important;
+    }
+    .install-app-btn {
+      width: 98vw !important;
+      max-width: 98vw !important;
+      font-size: 1rem !important;
+    }
+    section, .navbar-links.open {
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+    }
+    .featureCardStyle, .vehicleCardStyle {
+      min-width: 90vw !important;
+      max-width: 98vw !important;
+      margin: 8px auto !important;
+    }
+    .featureCardStyle {
+      padding: 18px 8px !important;
+    }
+    .vehicleCardStyle {
+      padding: 18px 8px !important;
+    }
+    .stats-bar {
+      flex-direction: column !important;
+      gap: 12px !important;
+      padding: 1.2rem 0 !important;
+      font-size: 1.1rem !important;
+    }
+    .howItWorksStep {
+      min-width: 90vw !important;
+      max-width: 98vw !important;
+      margin: 8px auto !important;
+    }
+    .navbar-links.open {
+      width: 100vw !important;
+      left: 0 !important;
+    }
+  }
+  @media (max-width: 700px) {
+    .hero-section h1 {
+      font-size: 1.5rem !important;
+    }
+    .hero-section p {
+      font-size: 0.95rem !important;
+    }
+    .install-app-btn {
+      font-size: 0.95rem !important;
+      padding: 0.7rem 0.5rem !important;
+    }
+    .navbar-hamburger {
+      width: 32px !important;
+      height: 32px !important;
+    }
+    .navbar-links.open {
+      font-size: 1.1rem !important;
+    }
+    footer {
+      font-size: 12px !important;
+      padding: 1rem 0.2rem !important;
+    }
+    .featureCardStyle, .vehicleCardStyle {
+      min-width: 98vw !important;
+      max-width: 98vw !important;
+      margin: 8px auto !important;
+    }
+    .featureCardStyle {
+      padding: 12px 4px !important;
+    }
+    .vehicleCardStyle {
+      padding: 12px 4px !important;
+    }
+  }
+  @media (max-width: 500px) {
+    .hero-section h1 {
+      font-size: 1.1rem !important;
+    }
+    .hero-section p {
+      font-size: 0.85rem !important;
+    }
+    .install-app-btn {
+      font-size: 0.85rem !important;
+      padding: 0.5rem 0.2rem !important;
+    }
+    .navbar-hamburger {
+      width: 28px !important;
+      height: 28px !important;
+    }
+    .navbar-links.open {
+      font-size: 1rem !important;
+    }
+    footer {
+      font-size: 11px !important;
+      padding: 0.7rem 0.1rem !important;
+    }
+    .featureCardStyle, .vehicleCardStyle {
+      min-width: 100vw !important;
+      max-width: 100vw !important;
+      margin: 4px auto !important;
+    }
+    .featureCardStyle {
+      padding: 8px 2px !important;
+    }
+    .vehicleCardStyle {
+      padding: 8px 2px !important;
+    }
+  }
+`;
+document.head.appendChild(landingResponsiveStyle); 

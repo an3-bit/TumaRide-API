@@ -31,7 +31,7 @@ const SignUp = () => {
     }
     setLoading(true);
     try {
-      const res = await fetch('https://tumaridesapi.onrender.com/api/v1/auth/register', {
+      const res = await fetch('https://tumaridesapi.onrender.com/user/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -50,9 +50,9 @@ const SignUp = () => {
         setSuccess(true);
         setTimeout(() => {
           if (type === 'mover') {
-            navigate('/rider');
+            navigate('/rider/profile-setup');
           } else {
-            navigate('/sender');
+            navigate('/sender/request-delivery');
           }
         }, 1200);
       }

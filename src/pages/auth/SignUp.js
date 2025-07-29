@@ -169,8 +169,17 @@ const SignUp = () => {
   const [success, setSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(false); // sign up modal
+  const [showLogin, setShowLogin] = useState(false); // login modal
   const navigate = useNavigate();
+
+  // Login modal state
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginShowPassword, setLoginShowPassword] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
+  const [loginSuccess, setLoginSuccess] = useState(false);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -214,6 +223,39 @@ const SignUp = () => {
     }
   };
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoginError('');
+    setLoginLoading(true);
+    try {
+      const res = await fetch('https://tumaridesapi.onrender.com/user/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: loginEmail, password: loginPassword })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setLoginError(data.message || 'Login failed');
+      } else {
+        setLoginSuccess(true);
+        setTimeout(() => {
+          setShowLogin(false);
+          if (loginEmail === 'admin@tumaride.com') {
+            navigate('/admin');
+          } else if (data.user && data.user.type && data.user.type.includes('rider')) {
+            navigate('/rider');
+          } else {
+            navigate('/sender');
+          }
+        }, 1000);
+      }
+    } catch (err) {
+      setLoginError('Network error');
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
   return (
     <div style={{ minHeight: '100vh', background: '#f8fdf9' }}>
       {/* Hero Section */}
@@ -227,8 +269,8 @@ const SignUp = () => {
             TumaRide offers a seamless delivery experience, ensuring your parcels arrive safely and on time. Sign up or log in to get started.
           </div>
           <div style={buttonRow}>
-            <button style={signupBtn} onClick={() => setShowForm(true)}>Sign Up</button>
-            <Link to="/auth/login" style={{ textDecoration: 'none' }}><button style={loginBtn}>Log In</button></Link>
+            <button style={signupBtn} onClick={() => { setShowForm(true); setShowLogin(false); }}>Sign Up</button>
+            <button style={loginBtn} onClick={() => { setShowLogin(true); setShowForm(false); }}>Log In</button>
           </div>
         </div>
       </div>
@@ -279,7 +321,32 @@ const SignUp = () => {
             {success && <div style={{ color: 'green', marginBottom: 12, textAlign: 'center' }}>Registration successful!</div>}
             <button type="submit" disabled={loading} style={{ background: '#1db954', color: '#fff', border: 'none', padding: '0.9rem 0', borderRadius: 8, width: '100%', fontWeight: 700, fontSize: 18, marginTop: 8 }}>{loading ? 'Signing Up...' : 'Sign Up'}</button>
             <div style={{ textAlign: 'center', marginTop: 18, color: '#888' }}>
-              Already have an account? <Link to="/auth/login" style={{ color: '#1db954', fontWeight: 600 }}>Sign In</Link>
+              Already have an account? <button type="button" style={{ color: '#1db954', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }} onClick={() => { setShowForm(false); setShowLogin(true); }}>Sign In</button>
+            </div>
+          </form>
+        </div>
+      )}
+      {/* Login Modal */}
+      {showLogin && (
+        <div style={formModalBg}>
+          <form onSubmit={handleLogin} style={formModal}>
+            <button type="button" style={closeBtn} onClick={() => setShowLogin(false)} aria-label="Close">×</button>
+            <h2 style={{ color: '#1db954', fontWeight: 800, marginBottom: 24, textAlign: 'center' }}>Sign In</h2>
+            <input value={loginEmail} onChange={e => setLoginEmail(e.target.value)} placeholder="Email" type="email" required style={{ display: 'block', margin: '1rem 0', padding: 12, width: '100%', borderRadius: 8, border: '1px solid #e8f5e9', fontSize: 16 }} />
+            <div style={{ position: 'relative', margin: '1rem 0' }}>
+              <input value={loginPassword} onChange={e => setLoginPassword(e.target.value)} placeholder="Password" type={loginShowPassword ? 'text' : 'password'} required style={{ display: 'block', padding: 12, width: '100%', borderRadius: 8, border: '1px solid #e8f5e9', fontSize: 16 }} />
+              <button type="button" onClick={() => setLoginShowPassword(v => !v)} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }} tabIndex={-1} aria-label="Toggle password visibility">
+                <EyeIcon visible={loginShowPassword} />
+              </button>
+            </div>
+            <div style={{ textAlign: 'right', marginBottom: 8 }}>
+              <Link to="/auth/request-reset" style={{ color: '#1db954', fontWeight: 500, fontSize: 15 }}>Forgot Password?</Link>
+            </div>
+            {loginError && <div style={{ color: 'red', marginBottom: 12, textAlign: 'center' }}>{loginError}</div>}
+            {loginSuccess && <div style={{ color: 'green', marginBottom: 12, textAlign: 'center' }}>Login successful!</div>}
+            <button type="submit" disabled={loginLoading} style={{ background: '#1db954', color: '#fff', border: 'none', padding: '0.9rem 0', borderRadius: 8, width: '100%', fontWeight: 700, fontSize: 18, marginTop: 8 }}>{loginLoading ? 'Signing In...' : 'Sign In'}</button>
+            <div style={{ textAlign: 'center', marginTop: 18, color: '#888' }}>
+              Don't have an account? <button type="button" style={{ color: '#1db954', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }} onClick={() => { setShowLogin(false); setShowForm(true); }}>Sign Up</button>
             </div>
           </form>
         </div>

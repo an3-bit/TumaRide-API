@@ -312,8 +312,8 @@ function HowItWorks() {
 
 const LandingPage = () => (
   <div style={{ fontFamily: 'Inter, sans-serif', background: '#f8fdf9', color: '#222' }}>
-    {/* Header */}
-    <ResponsiveNavbar />
+    {/* Header - removed ResponsiveNavbar, now global */}
+    {/* <ResponsiveNavbar /> */}
     {/* Install App button for small screens */}
     <InstallAppButton />
     {/* Hero Section */}
@@ -461,10 +461,10 @@ const LandingPage = () => (
       </div>
     </section>
 
-    {/* Minimal Footer */}
-    <footer style={{ background: '#fff', borderTop: '1px solid #e8f5e9', padding: '2rem 1rem', color: '#888', fontSize: 14, textAlign: 'center' }}>
+    {/* Minimal Footer - removed, now global */}
+    {/* <footer style={{ background: '#fff', borderTop: '1px solid #e8f5e9', padding: '2rem 1rem', color: '#888', fontSize: 14, textAlign: 'center' }}>
       © 2025 TumaRide. All rights reserved.
-    </footer>
+    </footer> */}
   </div>
 );
 

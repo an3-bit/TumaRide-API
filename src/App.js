@@ -30,6 +30,8 @@ import Dropoff from './pages/rider/Dropoff';
 import ConfirmDelivery from './pages/rider/ConfirmDelivery';
 import Dashboard from './pages/rider/Dashboard';
 import Withdraw from './pages/rider/Withdraw';
+import ResponsiveNavbar from './components/common/ResponsiveNavbar';
+import MinimalFooter from './components/common/MinimalFooter';
 import './App.css';
 
 function App() {
@@ -48,39 +50,43 @@ function App() {
 
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/sender" element={<SenderDashboard />} />
-        <Route path="/rider" element={<RiderDashboard />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/signup" element={<SignUp />} />
-        <Route path="/sender/request-delivery" element={<RequestDelivery />} />
-        <Route path="/sender/delivery-details" element={<DeliveryDetails />} />
-        <Route path="/sender/delivery-cost" element={<DeliveryCost />} />
-        <Route path="/sender/finding-rider" element={<FindingRider />} />
-        <Route path="/sender/rider-found" element={<RiderFound />} />
-        <Route path="/sender/tracking" element={<Tracking />} />
-        <Route path="/sender/payment" element={<Payment />} />
-        <Route path="/sender/receipt" element={<Receipt />} />
-        <Route path="/sender/live-tracking" element={<LiveTracking />} />
-        <Route path="/auth/become-mover" element={<BecomeMoverForm />} />
-        <Route path="/auth/onboarding" element={<OnboardingFlow />} />
-        <Route path="/auth/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/auth/request-reset" element={<RequestReset />} />
-        <Route path="/rider/welcome" element={<Welcome />} />
-        <Route path="/rider/profile-setup" element={<ProfileSetup />} />
-        <Route path="/rider/profile-under-review" element={<ProfileUnderReview />} />
-        <Route path="/rider/availability" element={<Availability />} />
-        <Route path="/rider/new-delivery-request" element={<NewDeliveryRequest />} />
-        <Route path="/rider/pickup" element={<Pickup />} />
-        <Route path="/rider/confirm-pickup" element={<ConfirmPickup />} />
-        <Route path="/rider/dropoff" element={<Dropoff />} />
-        <Route path="/rider/confirm-delivery" element={<ConfirmDelivery />} />
-        <Route path="/rider/dashboard" element={<Dashboard />} />
-        <Route path="/rider/withdraw" element={<Withdraw />} />
-        {/* Other routes handled elsewhere */}
-      </Routes>
+      <ResponsiveNavbar />
+      <div style={{ minHeight: 'calc(100vh - 120px)' }}>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/sender" element={<SenderDashboard />} />
+          <Route path="/rider" element={<RiderDashboard />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/auth/login" element={<Login />} />
+          <Route path="/auth/signup" element={<SignUp />} />
+          <Route path="/sender/request-delivery" element={<RequestDelivery />} />
+          <Route path="/sender/delivery-details" element={<DeliveryDetails />} />
+          <Route path="/sender/delivery-cost" element={<DeliveryCost />} />
+          <Route path="/sender/finding-rider" element={<FindingRider />} />
+          <Route path="/sender/rider-found" element={<RiderFound />} />
+          <Route path="/sender/tracking" element={<Tracking />} />
+          <Route path="/sender/payment" element={<Payment />} />
+          <Route path="/sender/receipt" element={<Receipt />} />
+          <Route path="/sender/live-tracking" element={<LiveTracking />} />
+          <Route path="/auth/become-mover" element={<BecomeMoverForm />} />
+          <Route path="/auth/onboarding" element={<OnboardingFlow />} />
+          <Route path="/auth/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/auth/request-reset" element={<RequestReset />} />
+          <Route path="/rider/welcome" element={<Welcome />} />
+          <Route path="/rider/profile-setup" element={<ProfileSetup />} />
+          <Route path="/rider/profile-under-review" element={<ProfileUnderReview />} />
+          <Route path="/rider/availability" element={<Availability />} />
+          <Route path="/rider/new-delivery-request" element={<NewDeliveryRequest />} />
+          <Route path="/rider/pickup" element={<Pickup />} />
+          <Route path="/rider/confirm-pickup" element={<ConfirmPickup />} />
+          <Route path="/rider/dropoff" element={<Dropoff />} />
+          <Route path="/rider/confirm-delivery" element={<ConfirmDelivery />} />
+          <Route path="/rider/dashboard" element={<Dashboard />} />
+          <Route path="/rider/withdraw" element={<Withdraw />} />
+          {/* Other routes handled elsewhere */}
+        </Routes>
+      </div>
+      <MinimalFooter />
     </Router>
   );
 }

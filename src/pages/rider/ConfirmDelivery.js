@@ -31,7 +31,7 @@ const ConfirmDelivery = () => {
           Please confirm the delivery of the parcel. You may be required to provide a photo of the delivered parcel or an OTP from the recipient.
         </div>
         <input placeholder="Enter OTP" style={{ display: 'block', margin: '1rem 0', padding: 12, width: '100%', borderRadius: 8, border: '1px solid #e8f5e9', fontSize: 16 }} />
-        <button type="button" onClick={() => navigate('/rider/dashboard')} style={{ background: '#7c3aed', color: '#fff', border: 'none', padding: '0.9rem 0', borderRadius: 8, width: '100%', fontWeight: 700, fontSize: 18 }}>Confirm Delivery</button>
+        <button type="button" onClick={() => navigate('/')} style={{ background: '#7c3aed', color: '#fff', border: 'none', padding: '0.9rem 0', borderRadius: 8, width: '100%', fontWeight: 700, fontSize: 18 }}>Confirm Delivery</button>
       </div>
     </div>
   );

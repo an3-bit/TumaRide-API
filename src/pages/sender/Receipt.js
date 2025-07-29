@@ -47,7 +47,7 @@ const Receipt = () => {
           <div style={{ color: '#888', fontSize: 15 }}>Payment Method <span style={{ color: '#222', float: 'right' }}>Credit Card</span></div>
           <div style={{ color: '#888', fontSize: 15 }}>Transaction ID <span style={{ color: '#222', float: 'right' }}>TXN1234567890</span></div>
         </div>
-        <button onClick={() => navigate('/sender/live-tracking')} style={{ background: '#1db954', color: '#fff', border: 'none', padding: '0.8rem 0', borderRadius: 8, width: '100%', fontWeight: 700, fontSize: 16, marginTop: 8 }}>Done</button>
+        <button onClick={() => navigate('/')} style={{ background: '#1db954', color: '#fff', border: 'none', padding: '0.8rem 0', borderRadius: 8, width: '100%', fontWeight: 700, fontSize: 16, marginTop: 8 }}>Done</button>
       </div>
     </div>
   );

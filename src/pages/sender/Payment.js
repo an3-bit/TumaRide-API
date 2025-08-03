@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const containerStyle = {
@@ -50,25 +50,54 @@ const mapStyle = {
 const Payment = () => {
   const navigate = useNavigate();
   const [payment, setPayment] = useState('wallet');
-  // Demo data
-  const delivery = {
-    pickup: '123 Elm Street, Nairobi',
-    dropoff: '456 Oak Avenue, Nairobi',
-    time: '10:00 AM - 11:00 AM',
-    cost: 'KES 500',
-  };
+  const [packageData, setPackageData] = useState(null);
+  const [deliveryCost, setDeliveryCost] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [paid, setPaid] = useState(false);
+
+  useEffect(() => {
+    // Get package and delivery cost data from sessionStorage
+    const storedPackageData = sessionStorage.getItem('packageData');
+    const storedDeliveryCost = sessionStorage.getItem('deliveryCost');
+    
+    if (storedPackageData && storedDeliveryCost) {
+      setPackageData(JSON.parse(storedPackageData));
+      setDeliveryCost(JSON.parse(storedDeliveryCost));
+    } else {
+      // If no data, redirect back to request delivery
+      navigate('/sender/request-delivery');
+    }
+    setLoading(false);
+  }, [navigate]);
+
   const receipt = {
-    id: 'TXN123456789',
-    date: 'July 26, 2024',
-    amount: 'KES 500',
+    id: 'TXN' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+    date: new Date().toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    }),
+    amount: `KSH ${deliveryCost?.totalCost?.toLocaleString() || 0}`,
     method: payment === 'wallet' ? 'Wallet' : 'M-PESA',
   };
-  const [paid, setPaid] = useState(false);
+
+  if (loading || !packageData || !deliveryCost) {
+    return (
+      <div style={containerStyle}>
+        <div style={cardStyle}>
+          <div style={{ textAlign: 'center', padding: '2rem' }}>
+            <div style={{ color: '#666' }}>Loading payment details...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={containerStyle}>
       <div style={cardStyle}>
         <h2 style={{ textAlign: 'center', fontWeight: 800, fontSize: 32, marginBottom: 32 }}>Payment</h2>
+        
         {/* Payment Method */}
         <div style={sectionTitle}>Payment Method</div>
         <div style={{ marginBottom: 24 }}>
@@ -81,27 +110,72 @@ const Payment = () => {
             M-PESA
           </label>
         </div>
+        
         {/* Delivery Details */}
         <div style={sectionTitle}>Delivery Details</div>
-        <div style={row}><span style={label}>Pickup Location</span><span style={value}>{delivery.pickup}</span></div>
-        <div style={row}><span style={label}>Delivery Location</span><span style={value}>{delivery.dropoff}</span></div>
-        <div style={row}><span style={label}>Estimated Time</span><span style={value}>{delivery.time}</span></div>
-        <div style={row}><span style={label}>Total Cost</span><span style={value}>{delivery.cost}</span></div>
+        <div style={row}>
+          <span style={label}>Package Title</span>
+          <span style={value}>{packageData.title}</span>
+        </div>
+        <div style={row}>
+          <span style={label}>Pickup Location</span>
+          <span style={value}>{packageData.from.name}</span>
+        </div>
+        <div style={row}>
+          <span style={label}>Delivery Location</span>
+          <span style={value}>{packageData.to.name}</span>
+        </div>
+        <div style={row}>
+          <span style={label}>Package Type</span>
+          <span style={value}>{packageData.type.charAt(0).toUpperCase() + packageData.type.slice(1)}</span>
+        </div>
+        <div style={row}>
+          <span style={label}>Package Size</span>
+          <span style={value}>{packageData.size.charAt(0).toUpperCase() + packageData.size.slice(1)}</span>
+        </div>
+        <div style={row}>
+          <span style={label}>Distance</span>
+          <span style={value}>{deliveryCost.distance} km</span>
+        </div>
+        <div style={row}>
+          <span style={label}>Total Cost</span>
+          <span style={value}>KSH {deliveryCost.totalCost.toLocaleString()}</span>
+        </div>
+        
         {/* Confirm and Pay */}
         {!paid && (
           <button style={button} onClick={() => setPaid(true)}>Confirm and Pay</button>
         )}
+        
         {/* Digital Receipt */}
         {paid && (
           <>
             <div style={sectionTitle}>Digital Receipt</div>
-            <div style={row}><span style={label}>Transaction ID</span><span style={value}>{receipt.id}</span></div>
-            <div style={row}><span style={label}>Date</span><span style={value}>{receipt.date}</span></div>
-            <div style={row}><span style={label}>Amount Paid</span><span style={value}>{receipt.amount}</span></div>
-            <div style={row}><span style={label}>Payment Method</span><span style={value}>{receipt.method}</span></div>
-            <div style={{ textAlign: 'center', margin: '24px 0 0 0', color: '#222', fontWeight: 500 }}>Payment Successful! Your parcel is on its way.</div>
+            <div style={row}>
+              <span style={label}>Transaction ID</span>
+              <span style={value}>{receipt.id}</span>
+            </div>
+            <div style={row}>
+              <span style={label}>Date</span>
+              <span style={value}>{receipt.date}</span>
+            </div>
+            <div style={row}>
+              <span style={label}>Amount Paid</span>
+              <span style={value}>{receipt.amount}</span>
+            </div>
+            <div style={row}>
+              <span style={label}>Payment Method</span>
+              <span style={value}>{receipt.method}</span>
+            </div>
+            <div style={{ textAlign: 'center', margin: '24px 0 0 0', color: '#222', fontWeight: 500 }}>
+              Payment Successful! Your parcel is on its way.
+            </div>
             <button style={button} onClick={() => navigate('/sender/tracking')}>Track Delivery</button>
-            <img src="https://maps.googleapis.com/maps/api/staticmap?center=Nairobi,Kenya&zoom=12&size=600x280&maptype=roadmap&markers=color:green%7Clabel:P%7C-1.2921,36.8219" alt="Map of Nairobi" style={mapStyle} />
+            <img 
+              src={`https://maps.googleapis.com/maps/api/staticmap?center=${packageData.from.coordinates[1]},${packageData.from.coordinates[0]}&zoom=12&size=600x280&maptype=roadmap&markers=color:green%7Clabel:P%7C${packageData.from.coordinates[1]},${packageData.from.coordinates[0]}&markers=color:red%7Clabel:D%7C${packageData.to.coordinates[1]},${packageData.to.coordinates[0]}`} 
+              alt="Delivery Route Map" 
+              style={mapStyle} 
+            />
           </>
         )}
       </div>

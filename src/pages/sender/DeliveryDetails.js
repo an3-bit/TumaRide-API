@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ResponsiveContainer from '../../components/common/ResponsiveContainer';
 
@@ -33,32 +33,221 @@ const selectBase = {
   background: `#fafafa url("data:image/svg+xml,%3Csvg width='16' height='16' fill='gray' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E") no-repeat right 12px center/16px 16px`,
 };
 
+const textareaBase = {
+  ...inputBase,
+  minHeight: 100,
+  resize: 'vertical',
+  fontFamily: 'inherit',
+};
+
 const DeliveryDetails = () => {
   const navigate = useNavigate();
+  const [deliveryData, setDeliveryData] = useState(null);
+  const [packageTitle, setPackageTitle] = useState('');
+  const [packageDescription, setPackageDescription] = useState('');
+  const [packageType, setPackageType] = useState('');
+  const [packageSize, setPackageSize] = useState('');
+  const [packageCost, setPackageCost] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    // Get delivery data from previous screen
+    const storedData = sessionStorage.getItem('deliveryData');
+    if (storedData) {
+      setDeliveryData(JSON.parse(storedData));
+    } else {
+      // If no data, redirect back to request delivery
+      navigate('/sender/request-delivery');
+    }
+  }, [navigate]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!packageTitle || !packageDescription || !packageType || !packageSize || !packageCost) {
+      setError('Please fill in all fields');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      // Get sender_id from localStorage or session (assuming user is logged in)
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const senderId = user._id || '68775a0c85b04bb80e812822'; // Fallback for demo
+
+      const packageData = {
+        sender_id: senderId,
+        type: packageType.toLowerCase(),
+        size: packageSize.toLowerCase(),
+        title: packageTitle,
+        description: packageDescription,
+        cost: parseInt(packageCost),
+        from: deliveryData.from,
+        to: deliveryData.to
+      };
+
+      // Send to backend API
+      const response = await fetch('https://tumaridesapi.onrender.com/user/package', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+        },
+        body: JSON.stringify(packageData)
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Failed to create package');
+      }
+
+      // Store package data for next screens
+      sessionStorage.setItem('packageData', JSON.stringify({
+        ...packageData,
+        _id: result._id || result.id
+      }));
+
+      // Navigate to delivery cost screen
+      navigate('/sender/delivery-cost');
+
+    } catch (err) {
+      setError(err.message || 'Failed to create package. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!deliveryData) {
+    return (
+      <ResponsiveContainer>
+        <div style={{ textAlign: 'center', padding: '2rem' }}>
+          <div style={{ color: '#666' }}>Loading...</div>
+        </div>
+      </ResponsiveContainer>
+    );
+  }
+
   return (
     <ResponsiveContainer>
-      <h2 style={{ color: '#1db954', fontWeight: 800, marginBottom: 32, textAlign: 'center', fontSize: '2rem' }}>Delivery Details</h2>
-      <input placeholder="Pickup Location" style={inputBase} />
-      <input placeholder="Drop-off Location" style={inputBase} />
-      <select style={selectBase}>
-        <option>Parcel Type</option>
-        <option>Document</option>
-        <option>Box</option>
-        <option>Bag</option>
-      </select>
-      <select style={selectBase}>
-        <option>Parcel Size</option>
-        <option>Small</option>
-        <option>Medium</option>
-        <option>Large</option>
-      </select>
-      <select style={selectBase}>
-        <option>Preferred Pickup Time</option>
-        <option>Morning</option>
-        <option>Afternoon</option>
-        <option>Evening</option>
-      </select>
-      <button type="button" onClick={() => navigate('/sender/delivery-cost')} style={{ ...buttonBase, background: '#1db954', color: '#fff', marginTop: 8 }}>Continue</button>
+      <h2 style={{ color: '#1db954', fontWeight: 800, marginBottom: 32, textAlign: 'center', fontSize: '2rem' }}>Package Details</h2>
+      
+      {/* Show delivery route summary */}
+      <div style={{ 
+        background: '#f8fdf9', 
+        borderRadius: 12, 
+        padding: 20, 
+        marginBottom: 24, 
+        border: '1px solid #e8f5e9' 
+      }}>
+        <h4 style={{ color: '#222', marginBottom: 12, fontWeight: 600 }}>Delivery Route</h4>
+        <div style={{ fontSize: 16, marginBottom: 8 }}>
+          <strong>From:</strong> {deliveryData.from.name}
+        </div>
+        <div style={{ fontSize: 16 }}>
+          <strong>To:</strong> {deliveryData.to.name}
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit}>
+        <div style={{ marginBottom: 24 }}>
+          <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: '#222' }}>Package Title</label>
+          <input 
+            placeholder="e.g., Glass Vase, Documents, Electronics" 
+            value={packageTitle}
+            onChange={(e) => setPackageTitle(e.target.value)}
+            style={inputBase} 
+            required
+          />
+        </div>
+
+        <div style={{ marginBottom: 24 }}>
+          <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: '#222' }}>Description</label>
+          <textarea 
+            placeholder="Describe your package (e.g., Handle with care. A decorative glass vase meant for display.)" 
+            value={packageDescription}
+            onChange={(e) => setPackageDescription(e.target.value)}
+            style={textareaBase} 
+            required
+          />
+        </div>
+
+        <div style={{ marginBottom: 24 }}>
+          <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: '#222' }}>Package Type</label>
+          <select 
+            value={packageType}
+            onChange={(e) => setPackageType(e.target.value)}
+            style={selectBase}
+            required
+          >
+            <option value="">Select Package Type</option>
+            <option value="fragile">Fragile</option>
+            <option value="document">Document</option>
+            <option value="electronics">Electronics</option>
+            <option value="clothing">Clothing</option>
+            <option value="food">Food</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div style={{ marginBottom: 24 }}>
+          <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: '#222' }}>Package Size</label>
+          <select 
+            value={packageSize}
+            onChange={(e) => setPackageSize(e.target.value)}
+            style={selectBase}
+            required
+          >
+            <option value="">Select Package Size</option>
+            <option value="small">Small (Up to 1kg)</option>
+            <option value="medium">Medium (1-5kg)</option>
+            <option value="large">Large (5-15kg)</option>
+            <option value="extra-large">Extra Large (15kg+)</option>
+          </select>
+        </div>
+
+        <div style={{ marginBottom: 24 }}>
+          <label style={{ display: 'block', marginBottom: 8, fontWeight: 600, color: '#222' }}>Package Value (KSH)</label>
+          <input 
+            type="number"
+            placeholder="e.g., 1500" 
+            value={packageCost}
+            onChange={(e) => setPackageCost(e.target.value)}
+            style={inputBase} 
+            min="0"
+            required
+          />
+        </div>
+
+        {error && (
+          <div style={{ 
+            color: '#d32f2f', 
+            background: '#ffebee', 
+            padding: 12, 
+            borderRadius: 8, 
+            marginBottom: 16,
+            border: '1px solid #ffcdd2'
+          }}>
+            {error}
+          </div>
+        )}
+
+        <button 
+          type="submit" 
+          disabled={loading}
+          style={{ 
+            ...buttonBase, 
+            background: loading ? '#ccc' : '#1db954', 
+            color: '#fff', 
+            marginTop: 8 
+          }}
+        >
+          {loading ? 'Creating Package...' : 'Continue'}
+        </button>
+      </form>
     </ResponsiveContainer>
   );
 };

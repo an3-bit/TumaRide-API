@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ResponsiveContainer from '../../components/common/ResponsiveContainer';
+import { useSocket } from '../../contexts/SocketContext';
 
 const buttonBase = {
   border: 'none',
@@ -42,6 +43,7 @@ const textareaBase = {
 
 const DeliveryDetails = () => {
   const navigate = useNavigate();
+  const { emitNewPackage } = useSocket();
   const [deliveryData, setDeliveryData] = useState(null);
   const [packageTitle, setPackageTitle] = useState('');
   const [packageDescription, setPackageDescription] = useState('');
@@ -106,10 +108,22 @@ const DeliveryDetails = () => {
       }
 
       // Store package data for next screens
-      sessionStorage.setItem('packageData', JSON.stringify({
+      const finalPackageData = {
         ...packageData,
         _id: result._id || result.id
-      }));
+      };
+      sessionStorage.setItem('packageData', JSON.stringify(finalPackageData));
+
+      // Emit new package event for real-time notifications to riders
+      const notificationData = {
+        ...finalPackageData,
+        estimatedEarnings: Math.round(packageData.cost * 0.3), // 30% of package value as estimated earnings
+        distance: Math.sqrt(
+          Math.pow(packageData.from.coordinates[0] - packageData.to.coordinates[0], 2) + 
+          Math.pow(packageData.from.coordinates[1] - packageData.to.coordinates[1], 2)
+        ) * 100 // Rough distance calculation
+      };
+      emitNewPackage(notificationData);
 
       // Navigate to delivery cost screen
       navigate('/sender/delivery-cost');
